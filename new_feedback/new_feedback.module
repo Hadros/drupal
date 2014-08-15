@@ -29,7 +29,7 @@
       '#type' => 'textfield',
       '#title' => t('Age'),
       '#required' => TRUE,
-      '#element_validate' => array('element_validate_integer_positive'),
+      '#element_validate' => array('element_validate_integers_positive'),
     );
     $form['theme'] = array(
       '#type' => 'textfield',
@@ -48,6 +48,13 @@
     );
     return $form;
   }   
+
+  function element_validate_integers_positive($element, &$form_state) {
+  $value = $element['#value'];
+  if ($value !== '' && (!is_numeric($value) || intval($value) != $value || $value <= 0 || $value >=100 )) {
+    form_error($element, t('%name must be a positive integer and less than 100.', array('%name' => $element['#title'])));
+  }
+}
 
   function main_function() {
     //obtain a form

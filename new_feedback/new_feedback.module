@@ -25,6 +25,13 @@
       '#title' => t('Name'),
       '#required' => TRUE,
     );
+    $form['mail'] = array(
+      '#type' => 'textfield',
+      '#title' => t('E-mail'),
+      '#required' => TRUE,
+      '#element_validate' => array('element_validate_mail'),
+      
+    );
     $form['old'] = array(
       '#type' => 'textfield',
       '#title' => t('Age'),
@@ -47,14 +54,21 @@
       '#value' => t('Submit'),
     );
     return $form;
-  }   
+  }
+
+  function element_validate_mail($element, &$form_state) {
+    $mail = $form_state['values']['mail'];
+    if (!valid_email_address($mail)) {
+    form_set_error('[mail]', t('The email address appears to be invalid.'));
+    }
+  }
 
   function element_validate_integers_positive($element, &$form_state) {
-  $value = $element['#value'];
-  if ($value !== '' && (!is_numeric($value) || intval($value) != $value || $value <= 0 || $value >=100 )) {
-    form_error($element, t('%name must be a positive integer and less than 100.', array('%name' => $element['#title'])));
+    $value = $element['#value'];
+    if ($value !== '' && (!is_numeric($value) || intval($value) != $value || $value <= 0 || $value >=100 )) {
+      form_error($element, t('%name must be a positive integer and less than 100.', array('%name' => $element['#title'])));
+    }
   }
-}
 
   function main_function() {
     //obtain a form
@@ -69,6 +83,7 @@
     $name = $form_state['values']['name'];
     $old = $form_state['values']['old'];
     $theme = $form_state['values']['theme'];
+    $mail = $form_state['values']['mail']; 
     $text = $form_state['values']['message'];
     $module = 'new_feedback';
     $key = 'key';
@@ -81,6 +96,7 @@
     $message['subject'] = $theme;
     $message['body'] = array();
     $message['body'][] = "Name: $name";
+    $message['body'][] = "E-mail: $mail";
     $message['body'][] = "Age: $old";
     $message['body'][] = "Message: $text";
     // Retrieve the responsible implementation for this message.

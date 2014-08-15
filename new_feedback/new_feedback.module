@@ -3,13 +3,13 @@
 
   function new_feedback_menu() {
     $items['feedback'] = array(
-      //заголовок страницы
-      'title' => 'Online-service',
-      //имя функции
+      //title of page
+      'title' => 'Feedback',
+      //name of function
       'page callback' => 'main_function',
-      //тип страницы
+      //type of page
       'type' => MENU_NORMAL_ITEM,
-      //доступ к странице 
+      //access to page
       'access callback' => TRUE, 
     ); 
     return $items;
@@ -38,7 +38,7 @@
     );
     $form['message'] = array(
       '#type' => 'textarea',
-      '#title' => t('message'),
+      '#title' => t('Message'),
       '#required' => TRUE,
     );
     
@@ -50,11 +50,11 @@
   }   
 
   function main_function() {
-    //получаем поля формы
+    //obtain a form
     $form = drupal_get_form('contact_form'); 
-    //рендерим форму
+    //rendering form
     $form = drupal_render($form); 
-    return $form . 'Field with "*" is required.';
+    return $form . 'Fields with "*" is required.';
   }
 
   function contact_form_submit($form, &$form_state) {
@@ -73,9 +73,9 @@
     $message = drupal_mail($module, $key, $email, $language, $params, $from, $send);
     $message['subject'] = $theme;
     $message['body'] = array();
-    $message['body'][] = "ФИО: $name";
-    $message['body'][] = "Возраст: $old";
-    $message['body'][] = "Сообщение: $text";
+    $message['body'][] = "Name: $name";
+    $message['body'][] = "Age: $old";
+    $message['body'][] = "Message: $text";
     // Retrieve the responsible implementation for this message.
     $system = drupal_mail_system($module, $key);
     // Format the message body.

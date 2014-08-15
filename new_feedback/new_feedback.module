@@ -1,0 +1,90 @@
+
+<?php
+  function new_feedback_menu(){
+  $items['feedback'] = array(
+    'title' => 'Интернет-приемная',//заголовок страницы
+    'page callback' => 'main_function',//имя функции
+    'type' => MENU_NORMAL_ITEM, //тип страницы
+    'access callback' => TRUE, //доступ к странице
+  );
+ 
+  return $items;
+}
+
+function contact_form($form, &$form_state){
+  $form['intro'] = array(
+    '#markup' => t('Используйте эту форму для отправки нам сообщений!'),
+  );
+
+  $form['name'] = array(
+    '#type' => 'textfield',
+    '#title' => t('ФИО'),
+    '#required' => TRUE,
+  );
+  $form['old'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Возраст'),
+    '#required' => TRUE,
+    '#element_validate' => array('element_validate_integer_positive')
+  );
+  $form['theme'] = array(
+    '#type' => 'textfield',
+    '#title' => t('Тема'),
+    '#required' => TRUE,
+  );
+  $form['message'] = array(
+    '#type' => 'textarea',
+    '#title' => t('Текст'),
+    '#required' => TRUE,
+  );
+  
+  $form['submit'] = array(
+    '#type' => 'submit',
+    '#value' => t('Отправить'),
+  );
+
+  return $form;
+}   
+
+  function main_function(){
+  $form = drupal_get_form('contact_form'); //получаем поля формы
+  $form = drupal_render($form); //рендерим форму
+  return $form.'Поля со "*" обязательные.';
+}
+
+
+function contact_form_submit($form, &$form_state){
+  //debug($form_state['values']);
+  $name=$form_state['values']['name'];
+  $old=$form_state['values']['old'];
+  $theme=$form_state['values']['theme'];
+  $text=$form_state['values']['message'];
+    $module = 'new_feedback';
+    $key = 'key';
+    $language = language_default();
+    $params = array();
+    $from = NULL;
+    $send = FALSE;
+    $email='hadrosbk@bk.ru';
+    $message = drupal_mail($module, $key, $email, $language, $params, $from, $send);
+    $message['subject'] = $theme;
+    $message['body'] = array();
+    $message['body'][] = "ФИО: $name";
+    $message['body'][] = "Возраст: $old";
+    $message['body'][] = "Сообщение: $text";
+   
+
+
+
+    // Retrieve the responsible implementation for this message.
+    $system = drupal_mail_system($module, $key);
+
+
+    // Format the message body.
+    $message = $system->format($message);
+
+
+    // Send e-mail.
+    $message['result'] = $system->mail($message);
+ 
+}

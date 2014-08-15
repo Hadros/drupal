@@ -1,0 +1,5 @@
+; &Id: $
+name=new_feedback
+description=Create the form for feedback
+version=7.x-dev
+core=7.x

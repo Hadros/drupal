@@ -4,7 +4,7 @@
   function new_feedback_menu() {
     $items['feedback'] = array(
       //заголовок страницы
-      'title' => 'Интернет-приемная',
+      'title' => 'Online-service',
       //имя функции
       'page callback' => 'main_function',
       //тип страницы
@@ -17,34 +17,34 @@
 
   function contact_form($form, &$form_state){
     $form['intro'] = array(
-      '#markup' => t('Используйте эту форму для отправки нам сообщений!'),
+      '#markup' => t('Use this form to send message to us'),
     );
 
     $form['name'] = array(
       '#type' => 'textfield',
-      '#title' => t('ФИО'),
+      '#title' => t('Name'),
       '#required' => TRUE,
     );
     $form['old'] = array(
       '#type' => 'textfield',
-      '#title' => t('Возраст'),
+      '#title' => t('Age'),
       '#required' => TRUE,
       '#element_validate' => array('element_validate_integer_positive'),
     );
     $form['theme'] = array(
       '#type' => 'textfield',
-      '#title' => t('Тема'),
+      '#title' => t('Theme'),
       '#required' => TRUE,
     );
     $form['message'] = array(
       '#type' => 'textarea',
-      '#title' => t('Текст'),
+      '#title' => t('message'),
       '#required' => TRUE,
     );
     
     $form['submit'] = array(
       '#type' => 'submit',
-      '#value' => t('Отправить'),
+      '#value' => t('Submit'),
     );
     return $form;
   }   
@@ -54,7 +54,7 @@
     $form = drupal_get_form('contact_form'); 
     //рендерим форму
     $form = drupal_render($form); 
-    return $form . 'Поля со "*" обязательные.';
+    return $form . 'Field with "*" is required.';
   }
 
   function contact_form_submit($form, &$form_state) {

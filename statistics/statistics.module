@@ -23,13 +23,11 @@ function statistics_table_data_page() {
     ->fields('u', array('uid', 'name', 'created'))
     ->execute();
   while ($value = $query->fetchAssoc()) {
-    $newdate = $value['created'];
-    $newdate = date("d/m/Y",$newdate);
-    if ($value['uid'] != 0) {
+      if ($value['uid'] != 0) {
       $rows[] = array(
       $value['uid'],
       $value['name'],
-      $newdate
+      date("d/m/Y", $value['created'])
       );
     }
   }

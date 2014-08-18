@@ -1,0 +1,58 @@
+<?php
+
+function statistics_menu() {
+  $items['statistics'] = array(
+    //title of page
+    'title' => 'Statistics',
+    //name of function
+    'page callback' => 'statistics_table_data_page',
+    //type of page
+    'type' => MENU_NORMAL_ITEM,
+    //access to page
+    'access callback' => TRUE, 
+    ); 
+  return $items;
+}
+
+
+
+function statistics_table_data_page() {
+  $header = array(t('ID'), t('Name'), t('Created'));
+  $rows = array();
+  $query = db_select('users', 'u')
+    ->fields('u', array('uid', 'name', 'created'))
+    ->execute();
+  while ($value = $query->fetchAssoc()) {
+    $newdate = $value['created'];
+    $newdate = date("d/m/Y",$newdate);
+    if ($value['uid'] != 0) {
+      $rows[] = array(
+      $value['uid'],
+      $value['name'],
+      $newdate
+      );
+    }
+  }
+  return theme('table', array('header' => $header, 'rows' => $rows));
+}
+
+function statistics_get_stats() {
+  global $user;  
+  $user_id = $user->uid;
+  $user_access = db_query("SELECT access FROM {users} WHERE uid = :uid", array(':uid' => $user_id))->fetchField();
+  $data = floor((REQUEST_TIME - $user_access) / 86400);
+  return $data;
+}
+
+
+function statistics_get_names() {
+$query = db_select('users', 'u');
+ 
+$query
+  ->condition('u.uid', 0, '<>')
+  ->fields('u', array('uid', 'name', 'status', 'created', 'access'))
+  ->range(0, 50); 
+$result = $query->execute();
+return $result;
+}
+ 

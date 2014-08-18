@@ -35,24 +35,4 @@ function statistics_table_data_page() {
   }
   return theme('table', array('header' => $header, 'rows' => $rows));
 }
-
-function statistics_get_stats() {
-  global $user;  
-  $user_id = $user->uid;
-  $user_access = db_query("SELECT access FROM {users} WHERE uid = :uid", array(':uid' => $user_id))->fetchField();
-  $data = floor((REQUEST_TIME - $user_access) / 86400);
-  return $data;
-}
-
-
-function statistics_get_names() {
-$query = db_select('users', 'u');
- 
-$query
-  ->condition('u.uid', 0, '<>')
-  ->fields('u', array('uid', 'name', 'status', 'created', 'access'))
-  ->range(0, 50); 
-$result = $query->execute();
-return $result;
-}
  

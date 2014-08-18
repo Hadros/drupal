@@ -11,6 +11,17 @@
       //access to page
       'access callback' => TRUE, 
     ); 
+
+    $items['admin/config/system/feedback'] = array(
+    'title' => 'Feedback',
+    'description' => 'Configuration for send message.',
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('new_feedback_admin_form'),
+    'access arguments' => array('administer users'),
+    'file' => 'new_feedback.admin.inc',
+    'type' => MENU_CALLBACK, 
+    
+    );
     return $items;
   }
 
@@ -29,6 +40,7 @@
       '#title' => t('E-mail'),
       '#required' => TRUE,
       '#element_validate' => array('element_validate_mail'),
+      
       
     );
     $form['old'] = array(
@@ -90,12 +102,12 @@
   function new_feedback_form_submit($form, &$form_state) {
     new_feedback_mail_send($form_state['values']);
   }
-    
+  
   function new_feedback_mail_send($form_values) {
       
     $module = 'new_feedback';
     $key = 'contact_message';
-    $to ='hadrosbk@bk.ru';
+    $to = variable_get('new_to', 'hadrosbk@bk.ru');
     $language = language_default();
     $params = $form_values; 
     $from = NULL;

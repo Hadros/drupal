@@ -17,17 +17,17 @@ function statistics_menu() {
 
 
 function statistics_table_data_page() {
-  $header = array(t('ID'), t('Name'), t('Created'));
+  $header = array(t('ID'), t('Name'), t('access'));
   $rows = array();
   $query = db_select('users', 'u')
-    ->fields('u', array('uid', 'name', 'created'))
+    ->fields('u', array('uid', 'name', 'access'))
     ->execute();
   while ($value = $query->fetchAssoc()) {
-      if ($value['uid'] != 0) {
+      if ($value['uid'] != 0 && $value['access'] !=0 ) {
       $rows[] = array(
       $value['uid'],
       $value['name'],
-      date("d/m/Y", $value['created'])
+      date("d/m/Y", $value['access'])
       );
     }
   }

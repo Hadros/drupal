@@ -78,11 +78,6 @@
   }
 
   function new_feedback_mail($key, &$message, $params) {
-
-  // Each message is associated with a language, which may or may not be the
-  // current user's selected language, depending on the type of e-mail being
-  // sent. This $options array is used later in the t() calls for subject
-  // and body to ensure the proper translation takes effect.
   
       $message['subject'] = check_plain($params['theme']);
       $message['body'][] = 'Name: ' . check_plain($params['name']);
@@ -107,11 +102,11 @@
     $send = TRUE;
     
     $result = drupal_mail($module, $key, $to, $language, $params, $from, $send);
-  if ($result['result'] == TRUE) {
-    drupal_set_message(t('Your message has been sent.'));
-  }
-  else {
-    drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
-  }
+    if ($result['result'] == TRUE) {
+      drupal_set_message(t('Your message has been sent.'));
+    }
+    else {
+     drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
+    }
 
   }

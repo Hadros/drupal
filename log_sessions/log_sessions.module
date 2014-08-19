@@ -1,0 +1,55 @@
+<?php
+
+function log_sessions_menu() {
+  $items['log_sessions'] = array(
+    //title of page
+    'title' => 'Logs',
+    //name of function
+    'page callback' => 'log_sessions_table_data_page',
+    //type of page
+    'type' => MENU_NORMAL_ITEM,
+    //access to page
+    'access callback' => TRUE, 
+    ); 
+  return $items;
+}
+
+function log_sessions_table_data_page() {
+  global $user;  
+  if (user_is_logged_in() === TRUE )
+   {
+   
+  }
+ 
+  $header = array(t('ID'), t('Name'), t('Time'));
+  $rows = array();
+  $query = db_select('log_sessions', 'l')
+    ->fields('l', array('uid', 'name', 'login'))
+    ->orderBy('l.myid', 'DESC')
+    ->extend('PagerDefault')
+    ->limit(10)
+    ->execute();
+  while ($value = $query->fetchAssoc()) {
+      if ($value['uid'] != 0 && $value['login'] !=0 ) {
+      $rows[] = array(
+      $value['uid'],
+      $value['name'],
+      date("D M j G:i:s Y", $value['login'])
+      );
+    }
+  }
+  return theme('table', array('header' => $header, 'rows' => $rows)) . theme('pager');
+
+}
+function log_sessions_user_login(&$edit, $account) {
+  global $user;  
+  if (user_is_logged_in() === TRUE ) {
+    $query = db_select('users', 'u') ->where('u.uid = :uid', array(':uid' => $user->uid));
+    $query->addField('u','uid');//->where('u.uid = :uid', array(':uid' => $uid));
+    $query->addField('u','name');// ->where('u.uid = :uid', array(':uid' => $uid));
+    $query->addField('u','login');// ->where('u.uid = :uid', array(':uid' => $uid));
+    db_insert('log_sessions')
+    ->from($query)
+    ->execute(); 
+  }
+}

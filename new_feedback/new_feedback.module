@@ -12,14 +12,14 @@
       'access callback' => TRUE, 
     ); 
 
-    $items['admin/config/system/feedback'] = array(
-    'title' => 'Feedback',
+    $items['admin/config/people/change_address'] = array(
+    'title' => 'Change address',
     'description' => 'Configuration for send message.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('new_feedback_admin_form'),
     'access arguments' => array('administer users'),
     'file' => 'new_feedback.admin.inc',
-    'type' => MENU_CALLBACK, 
+    'type' => MENU_NORMAL_ITEM,
     
     );
     return $items;
@@ -68,9 +68,9 @@
   }
 
   function element_validate_mail($element, &$form_state) {
-    $mail = $form_state['values']['mail'];
-    if (!valid_email_address($mail)) {
-    form_set_error('[mail]', t('The email address appears to be invalid.'));
+    $value = $element['#value'];
+    if (!valid_email_address($value)) {
+      form_error($element, t('%name appears to be invalid.', array('%name' => $element['#title'])));
     }
   }
 
@@ -118,7 +118,7 @@
       drupal_set_message(t('Your message has been sent.'));
     }
     else {
-     drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
+      drupal_set_message(t('There was a problem sending your message and it was not sent.'), 'error');
     }
 
   }

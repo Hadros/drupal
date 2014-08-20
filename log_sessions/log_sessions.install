@@ -34,8 +34,6 @@ function log_sessions_schema() {
         ),
         'primary key' => array('myid'),
     );
- 
-    return $schema;
 }
  
 function log_sessions_install() {

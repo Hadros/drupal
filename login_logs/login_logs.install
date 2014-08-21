@@ -4,44 +4,41 @@
  * Implement hook_schema()
  */
 function login_logs_schema() {
-    $schema['login_logs'] = array(
-        'description' => 'The base table for login_logs module.',
-        'fields' => array(
-            'myid' => array(
-                'description' => t('myid'),
-                'type' => 'serial',
-                'not null' => false,
-            ),
-            
-            'uid' => array(
-                'description' => t('User ID'),
-                'type' => 'int',
-                'not null' => false,
-            ),
-            
-            'name' => array(
-                'description' => t('Name'),
-                'type' => 'varchar',
-                'length' => 255,
-                'not null' => true,
-                'default' => '',
-            ),
-            'login' => array(
-                'description' => t('Date'),
-                'type' => 'text',
-                'not null' => false,
-            ),
-        ),
-        'primary key' => array('myid'),
-    );
-    
-    return $schema;
+  $schema['login_logs'] = array(
+    'description' => 'The base table for login_logs module.',
+    'fields' => array(
+      'myid' => array(
+        'description' => t('myid'),
+        'type' => 'serial',
+        'not null' => false,
+      ),            
+      'uid' => array(
+        'description' => t('User ID'),
+        'type' => 'int',
+        'not null' => false,
+      ),     
+      'name' => array(
+        'description' => t('Name'),
+        'type' => 'varchar',
+        'length' => 255,
+        'not null' => true,
+        'default' => '',
+      ),
+      'login' => array(
+        'description' => t('Date'),
+        'type' => 'text',
+        'not null' => false,
+      ),
+    ),
+    'primary key' => array('myid'),
+  );
+  return $schema;
 }
  
 function login_logs_install() {
-    drupal_install_schema('login_logs');
+  drupal_install_schema('login_logs');
 }
  
 function login_logs_uninstall() {
-    drupal_uninstall_schema('login_logs');
+  drupal_uninstall_schema('login_logs');
 }

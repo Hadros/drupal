@@ -1,48 +1,46 @@
-s<?php
+<?php
 
+/**
+ * Implement hook_menu().
+ */
 function log_sessions_menu() {
   $items['log_sessions'] = array(
-    //title of page
     'title' => 'Logs',
-    //name of function
-    'page callback' => 'log_sessions_table_data_page',
-    //type of page
+    'page callback' => 'log_session_table_data_page1',
     'type' => MENU_NORMAL_ITEM,
-    //access to page
     'access callback' => TRUE, 
   ); 
   $items['log_sessions/all'] = array(
-    //title of page
     'title' => 'All statistics',
-    //name of function
-    'page callback' => 'log_sessions_table_data_page',
-    //type of page
+    'page callback' => 'log_session_table_data_page1',
     'type' => MENU_LOCAL_TASK,
-    //access to page
     'access callback' => TRUE, 
   ); 
   $items['log_sessions/average'] = array(
-    //title of page
     'title' => 'Average statistics',
-    //name of function
-    'page callback' => 'log_sessions_table_data_page2',
-    //type of page
+    'page callback' => 'log_session_table_data_page2',
     'type' => MENU_LOCAL_TASK,
-    //access to page
     'access callback' => TRUE, 
   ); 
   return $items;
 }
 
-function log_sessions_table_data_page() {
+/**
+* Table builder; All statistics table.
+*
+*/
+function log_session_table_data_page1() {
   $header = array(t('ID'), t('Name'), t('Time'));
-  $rows = array();
+  
+  //Select data from 'log_session' table with options.
   $query = db_select('log_sessions', 'l')
     ->fields('l', array('uid', 'name', 'login'))
     ->orderBy('l.myid', 'DESC')
     ->extend('PagerDefault')
-    ->limit(10)
+    ->limit(9)
     ->execute();
+
+  // Read query and fill rows of the table.
   while ($value = $query->fetchAssoc()) {
     if ($value['uid'] != 0 && $value['login'] !=0 ) {
       $rows[] = array(
@@ -55,48 +53,57 @@ function log_sessions_table_data_page() {
   return theme('table', array('header' => $header, 'rows' => $rows)) . theme('pager');
 }
 
-  function log_sessions_table_data_page2() {
-    $i=0;
-    $j=0;
-    $t=0;
+/**
+* Table builder; Average statistics table.
+*
+*/
+function log_session_table_data_page2() {  
+  $i=0;
   $header = array(t('Name'), t('Count'));
-  $rows = array();
-  $mas = array();
+  
+  //Select data from 'log_session' table with options.
   $query = db_select('log_sessions', 'l')
-    //->groupBy('l.uid')
-
-    ->fields('l', array('name', 'uid'))
+    ->fields('l', array('name'))
     ->orderBy('l.uid', 'ASC')
-    ->extend('PagerDefault')
-    ->limit(10)
     ->execute();
 
-
-    while ($value = $query->fetchAssoc()) {     
-    $mas[] =  $value['uid'];
+  // Read query and fill array.
+  while ($value = $query->fetchAssoc()) {     
     $names[] = $value['name'];
-    $t++;
-    }  
-   
-    $array = array_count_values($names);
-    foreach ($array as $key => $value) {
-          $rows[] = array(
-          $key,
-          $value,
-          );
-    }
+  }
+  
+  //Returns an array using the values of array as keys and their frequency in array as values.
+  $array = array_count_values($names);
+  foreach ($array as $key => $value) {
+    $rows[] = array(     
+      $key,
+      $value,
+    );
 
+    // Number elements per page.
+    $per_page = 9;
 
-  return theme('table', array('header' => $header, 'rows' => $rows)) . theme('pager');
+    // Initialise the pager.
+    $page = pager_default_initialize(count($rows), $per_page);
+
+    // Split your list into page sized chunks.
+    $chunks = array_chunk($rows, $per_page, TRUE);
+  }
+  
+   return theme('table', array('header' => $header, 'rows' => $chunks[$page])) . theme('pager');
 }
 
+/**
+ * Implement hook_user_login().
+ */
 function log_sessions_user_login(&$edit, $account) {
+  //Selects varaibles for input 'log_sessions' table.
   global $user;  
   if (user_is_logged_in() === TRUE ) {
-    $query = db_select('users', 'u') ->where('u.uid = :uid', array(':uid' => $user->uid));
-    $query->addField('u','uid');//->where('u.uid = :uid', array(':uid' => $uid));
-    $query->addField('u','name');// ->where('u.uid = :uid', array(':uid' => $uid));
-    $query->addField('u','login');// ->where('u.uid = :uid', array(':uid' => $uid));
+    $query = db_select('users', 'u')->where('u.uid = :uid', array(':uid' => $user->uid));
+    $query->addField('u','uid');
+    $query->addField('u','name');
+    $query->addField('u','login');
     db_insert('log_sessions')
     ->from($query)
     ->execute(); 

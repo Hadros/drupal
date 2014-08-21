@@ -1,0 +1,5 @@
+; &Id: $
+name=log_sessions
+description=Create the table for log_sessions
+version=7.x-dev
+core=7.x

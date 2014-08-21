@@ -1,0 +1,45 @@
+<?php // file mymodule.install
+ 
+/**
+ * Implement hook_schema()
+ */
+function log_sessions_schema() {
+    $schema['log_sessions'] = array(
+        'description' => 'The base table for log_sessions module.',
+        'fields' => array(
+            'myid' => array(
+                'description' => t('myid'),
+                'type' => 'serial',
+                'not null' => false,
+            ),
+            
+            'uid' => array(
+                'description' => t('User ID'),
+                'type' => 'int',
+                'not null' => false,
+            ),
+            
+            'name' => array(
+                'description' => t('Name'),
+                'type' => 'varchar',
+                'length' => 255,
+                'not null' => true,
+                'default' => '',
+            ),
+            'login' => array(
+                'description' => t('Date'),
+                'type' => 'text',
+                'not null' => false,
+            ),
+        ),
+        'primary key' => array('myid'),
+    );
+}
+ 
+function log_sessions_install() {
+    drupal_install_schema('log_sessions');
+}
+ 
+function log_sessions_uninstall() {
+    drupal_uninstall_schema('log_sessions');
+}

@@ -1,0 +1,113 @@
+ <?php
+
+/**
+ * Implement hook_menu().
+ */
+function login_logs_menu() {
+  $items = array();
+  $items['login_logs'] = array(
+    'title' => 'Logs',
+    'page callback' => 'login_logs_get_all_stats',
+    'type' => MENU_NORMAL_ITEM,
+    'access callback' => TRUE, 
+  ); 
+  $items['login_logs/all'] = array(
+    'title' => 'All statistics',
+    'page callback' => 'login_logs_get_all_stats',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => TRUE, 
+  ); 
+  $items['login_logs/average'] = array(
+    'title' => 'Average statistics',
+    'page callback' => 'login_logs_get_average_stats',
+    'type' => MENU_LOCAL_TASK,
+    'access callback' => TRUE, 
+  ); 
+  return $items;
+}
+
+/**
+* Table builder; All statistics table.
+*
+*/
+function login_logs_get_all_stats() {
+  $header = array(t('ID'), t('Name'), t('Time'));
+  $rows_all_stats = array();
+
+  // Number elements per page.
+  variable_set('per_page', 9);
+
+  //Select data from 'login_logs' table with options.
+  $query = db_select('login_logs', 'l')
+    ->fields('l', array('uid', 'name', 'login'))
+    ->orderBy('l.myid', 'DESC')
+    ->extend('PagerDefault')
+    ->limit(variable_get('per_page', '9'))
+    ->execute();
+
+  // Read query and fill rows of the table.
+  while ($value = $query->fetchAssoc()) {
+    $rows_all_stats[] = array(
+    $value['uid'],
+    $value['name'],
+    date("D M j G:i:s Y", $value['login'])
+    );
+  }
+
+  $output = theme('table', array('header' => $header, 'rows' => $rows_all_stats));
+  $output .= theme('pager');
+
+  return $output;
+}
+
+/**
+* Table builder; Average statistics table.
+*
+*/
+function login_logs_get_average_stats() {  
+  $header = array(t('Name'), t('Count'));
+  $rows_average_stats = array();
+  $names = array();
+
+  //Select data from 'login_logs' table with options.
+  $query = db_select('login_logs', 'l')
+    ->fields('l', array('name'))
+    ->orderBy('l.uid', 'ASC')
+    ->execute();
+
+  // Read query and fill array.
+  while ($value = $query->fetchAssoc()) {     
+    $names[] = $value['name'];
+  }
+  
+  //Returns an array using the values of array as keys and their frequency in array as values.
+  $array = array_count_values($names);
+  foreach ($array as $key => $value) {
+    $average_stats[] = array(     
+      $key,
+      $value,
+    );
+
+    // Initialise the pager.
+    $page = pager_default_initialize(count($rows), variable_get('per_page', '9'));
+
+    // Split your list into page sized chunks.
+    $chunks = array_chunk($average_stats, variable_get('per_page', '9'), TRUE);
+  }
+
+  $output = theme('table', array('header' => $header, 'rows' => $chunks[$page]));
+  $output .= theme('pager');
+  
+  return $output;
+}
+
+/**
+ * Implement hook_user_login().
+ */
+function login_logs_user_login(&$edit, $account) {
+
+  //Selects varaibles for input 'login_logs' table.  
+  $add = db_insert('login_logs')
+  ->fields(array('uid' => $account['uid'], 'name' => $accoun['name'], 'login' => $account['login']))
+  ->execute();
+}

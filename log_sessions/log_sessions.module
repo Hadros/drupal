@@ -58,7 +58,6 @@ function log_session_table_data_page1() {
 *
 */
 function log_session_table_data_page2() {  
-  $i=0;
   $header = array(t('Name'), t('Count'));
   
   //Select data from 'log_session' table with options.
@@ -97,6 +96,7 @@ function log_session_table_data_page2() {
  * Implement hook_user_login().
  */
 function log_sessions_user_login(&$edit, $account) {
+
   //Selects varaibles for input 'log_sessions' table.
   global $user;  
   if (user_is_logged_in() === TRUE ) {

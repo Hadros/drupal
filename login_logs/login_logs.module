@@ -42,7 +42,7 @@ function login_logs_get_all_stats() {
     ->fields('l', array('uid', 'name', 'login'))
     ->orderBy('l.myid', 'DESC')
     ->extend('PagerDefault')
-    ->limit(variable_get('per_page', '$per_page'))
+    ->limit(variable_get('per_page', $per_page))
     ->execute();
 
   // Read query and fill rows of the table.
@@ -69,6 +69,9 @@ function login_logs_get_average_stats() {
   $rows_average_stats = array();
   $names = array();
 
+  // Number elements per page.
+  $per_page = 9; 
+
   //Select data from 'login_logs' table with options.
   $query = db_select('login_logs', 'l')
     ->fields('l', array('name'))
@@ -89,10 +92,10 @@ function login_logs_get_average_stats() {
     );
 
     // Initialise the pager.
-    $page = pager_default_initialize(count($rows_average_stats), variable_get('per_page', '$per_page'));
+    $page = pager_default_initialize(count($rows_average_stats), variable_get('per_page', $per_page));
 
     // Split your list into page sized chunks.
-    $chunks = array_chunk($rows_average_stats, variable_get('per_page', '$per_page'), TRUE);
+    $chunks = array_chunk($rows_average_stats, variable_get('per_page', $per_page), TRUE);
   }
 
   $output = theme('table', array('header' => $header, 'rows' => $chunks[$page]));
@@ -109,8 +112,8 @@ function login_logs_user_login(&$edit, $account) {
   //Selects varaibles for input in 'login_logs' table.
   $new_uid = $account->uid;
   $new_name = $account->name;
-  $new_login = $account->login;
+  $new_time_login = $account->login;
   $add = db_insert('login_logs')
-  ->fields(array('uid' => $new_uid, 'name' => $new_name, 'login' => $new_login))
+  ->fields(array('uid' => $new_uid, 'name' => $new_name, 'login' => $new_time_login))
   ->execute();
 }

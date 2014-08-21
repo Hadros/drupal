@@ -1,5 +1,5 @@
 ; &Id: $
 name=login_logs
-description=Create the table for login_logs
+description=Create the table and pages for login statistics.
 version=7.x-dev
 core=7.x

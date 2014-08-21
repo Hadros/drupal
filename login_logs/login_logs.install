@@ -34,6 +34,8 @@ function login_logs_schema() {
         ),
         'primary key' => array('myid'),
     );
+    
+    return $schema;
 }
  
 function login_logs_install() {

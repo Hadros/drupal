@@ -1,7 +1,7 @@
 <?php // file mymodule.install
  
 /**
- * Number elements per page.
+ * Maximum length of username text field.
  */ 
 define('MAX_LENGHT', 255);
 

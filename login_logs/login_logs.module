@@ -39,12 +39,7 @@ function login_logs_get_all_stats() {
   $header = array(t('ID'), t('Name'), t('Time'));
   $rows = array();
   //Select data from 'login_logs' table with  some options.
-  $query = db_select('login_logs', 'l')
-    ->fields('l', array('uid', 'name', 'login'))
-    ->orderBy('l.myid', 'DESC')
-    ->extend('PagerDefault')
-    ->limit(variable_get('per_page', PER_PAGES))
-    ->execute();
+  $query = login_logs_select_all_data();
   // Read query and fill rows of the table.
   while ($value = $query->fetchAssoc()) {
     $rows[] = array(
@@ -53,8 +48,13 @@ function login_logs_get_all_stats() {
       format_date($value['login'], 'medium'),
     );
   }
-  $output = theme('table', array('header' => $header, 'rows' => $rows));
-  $output .= theme('pager');
+  //Check for the existence of data in the 'login_logs' table for correctly output.
+  if (isset($value['udi'])) {
+    $output = theme('table', array('header' => $header, 'rows' => $rows));
+    $output .= theme('pager'); 
+  } else {
+    $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
+  }    
   return $output;
 }
 
@@ -66,29 +66,33 @@ function login_logs_get_average_stats() {
   $header = array(t('Name'), t('Count'));
   $rows = array();
   $names = array();
+  $page = array();
+  $chunks  = array();
   //Select data from 'login_logs' table with some options.
-  $query = db_select('login_logs', 'l')
-    ->fields('l', array('name'))
-    ->orderBy('l.uid', 'ASC')
-    ->execute();
+  $query = login_logs_select_names();
   //Read query and fill array.
   while ($value = $query->fetchAssoc()) {     
     $names[] = $value['name'];
   }
   //Returns an array using the values of array as keys and their frequency in array as values.
   $number_users_login = array_count_values($names);
-  foreach ($number_users_login  as $key => $value) {
+  foreach ($number_users_login as $key => $value) {
     $rows[] = array(     
       $key,
       $value,
-    );
+    ); 
     // Initialise the pager.
     $page = pager_default_initialize(count($rows), variable_get('per_page', PER_PAGES));
     // Split your list into page sized chunks.
     $chunks = array_chunk($rows, variable_get('per_page', PER_PAGES), TRUE);
   }
-  $output = theme('table', array('header' => $header, 'rows' => $chunks[$page]));
-  $output .= theme('pager');  
+  //Check for the existence of data in the 'login_logs' table for correctly output.
+  if (isset($key)) {
+    $output = theme('table', array('header' => $header, 'rows' => $chunks[$page]));
+    $output .= theme('pager'); 
+  } else {
+    $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
+  }    
   return $output;
 }
 
@@ -105,4 +109,24 @@ function login_logs_user_login(&$edit, $account) {
   $add_data = db_insert('login_logs')
     ->fields($user_values)
     ->execute();
+}
+
+function login_logs_select_all_data() {
+  //Select data from 'login_logs' table with  some options.
+  $query = db_select('login_logs', 'l')
+    ->fields('l', array('uid', 'name', 'login'))
+    ->orderBy('l.myid', 'DESC')
+    ->extend('PagerDefault')
+    ->limit(variable_get('per_page', PER_PAGES))
+    ->execute();
+  return $query;
+}
+
+function login_logs_select_names() {
+  //Select data from 'login_logs' table with some options.
+  $query = db_select('login_logs', 'l')
+    ->fields('l', array('name'))
+    ->orderBy('l.uid', 'ASC')
+    ->execute();
+  return $query;
 }

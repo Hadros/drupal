@@ -39,20 +39,16 @@ function login_logs_get_all_stats() {
   $header = array(t('ID'), t('Name'), t('Time'));
   $rows = array();
   //Select data from 'login_logs' table with options.
-  $rows =  login_logs_select_all_data();
+  $rows = login_logs_select_all_data();
   //Format the date.
-  foreach ($rows as $key => $value) { 
-    foreach ($value as $under_key => $under_value) { 
-      if ($under_key=='login') { 
-        $rows[$key]['login'] = format_date($under_value, 'medium');
+  foreach ($rows as $key => $value) {  
+     if (isset($value['login'])) { 
+        $rows[$key]['login'] = format_date($value['login'], 'medium');
       } 
-      else { 
-        $rows[$key][$under_key] = $under_value; 
-      } 
-    } 
-  }
+    }
   $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
   $output .= theme('pager'); 
+  //$output = print_r($rows);
   return $output;
 }
 

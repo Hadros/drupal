@@ -39,15 +39,15 @@ function login_logs_get_all_stats() {
   $header = array(t('ID'), t('Name'), t('Time'));
   $rows = array();
   //Select data from 'login_logs' table with options.
-  $rows = login_logs_select_all_data();
+  $rows =  login_logs_select_all_data();
   //Format the date.
   foreach ($rows as $key => $value) { 
-    foreach ($value as $und_key => $und_value) { 
-      if ($und_key=='2') { 
-        $rows[$key]['2'] = format_date($und_value, 'medium');
+    foreach ($value as $under_key => $under_value) { 
+      if ($under_key=='login') { 
+        $rows[$key]['login'] = format_date($under_value, 'medium');
       } 
       else { 
-        $rows[$key][$und_key] = $und_value; 
+        $rows[$key][$under_key] = $under_value; 
       } 
     } 
   }
@@ -116,12 +116,10 @@ function login_logs_select_all_data() {
     ->limit(variable_get('per_page', PER_PAGES))
     ->execute();
   // Read query and fill rows of the table.
-  while ($value = $query->fetchAssoc()) {
-    $rows[] = array(
-      $value['uid'],
-      $value['name'],
-      $value['login'],
-    );
+  foreach ($query as $key => $value) { 
+    foreach ($value as $under_key => $under_value) { 
+      $rows[$key][$under_key] = $under_value;
+    } 
   }
   return $rows;
 }

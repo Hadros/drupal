@@ -48,7 +48,6 @@ function login_logs_get_all_stats() {
   }
   $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
   $output .= theme('pager'); 
-  //$output = print_r($rows);
   return $output;
 }
 

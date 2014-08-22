@@ -39,15 +39,7 @@ function login_logs_get_all_stats() {
   $header = array(t('ID'), t('Name'), t('Time'));
   $rows = array();
   //Select data from 'login_logs' table with  some options.
-  $query = login_logs_select_all_data();
-  // Read query and fill rows of the table.
-  while ($value = $query->fetchAssoc()) {
-    $rows[] = array(
-      $value['uid'],
-      $value['name'],
-      format_date($value['login'], 'medium'),
-    );
-  }
+  $rows= login_logs_select_all_data();
   $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
   $output .= theme('pager'); 
   return $output;
@@ -64,11 +56,7 @@ function login_logs_get_average_stats() {
   $page = array();
   $chunks  = array();
   //Select data from 'login_logs' table with some options.
-  $query = login_logs_select_names();
-  //Read query and fill array.
-  while ($value = $query->fetchAssoc()) {     
-    $names[] = $value['name'];
-  }
+  $names = login_logs_select_names();  
   //Returns an array using the values of array as keys and their frequency in array as values.
   $number_users_login = array_count_values($names);
   foreach ($number_users_login as $key => $value) {
@@ -108,6 +96,7 @@ function login_logs_user_login(&$edit, $account) {
 }
 
 function login_logs_select_all_data() {
+  $rows = array();
   //Select data from 'login_logs' table with  some options.
   $query = db_select('login_logs', 'l')
     ->fields('l', array('uid', 'name', 'login'))
@@ -115,14 +104,27 @@ function login_logs_select_all_data() {
     ->extend('PagerDefault')
     ->limit(variable_get('per_page', PER_PAGES))
     ->execute();
-  return $query;
+  // Read query and fill rows of the table.
+  while ($value = $query->fetchAssoc()) {
+    $rows[] = array(
+      $value['uid'],
+      $value['name'],
+      format_date($value['login'], 'medium'),
+    );
+  }
+  return $rows;
 }
 
 function login_logs_select_names() {
+  $names = array();
   //Select data from 'login_logs' table with some options.
   $query = db_select('login_logs', 'l')
     ->fields('l', array('name'))
     ->orderBy('l.uid', 'ASC')
     ->execute();
-  return $query;
+  //Read query and fill array.
+  while ($value = $query->fetchAssoc()) {     
+    $names[] = $value['name'];
+  }
+  return $names;
 }

@@ -42,10 +42,10 @@ function login_logs_get_all_stats() {
   $rows = login_logs_select_all_data();
   //Format the date.
   foreach ($rows as $key => $value) {  
-     if (isset($value['login'])) { 
+    if (isset($value['login'])) { 
         $rows[$key]['login'] = format_date($value['login'], 'medium');
-      } 
-    }
+    } 
+  }
   $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
   $output .= theme('pager'); 
   //$output = print_r($rows);

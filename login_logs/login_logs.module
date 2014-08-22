@@ -3,8 +3,7 @@
 /**
  * Number elements per page.
  */ 
-define('PER_PAGES', 4);
-
+define('PER_PAGES', 6);
 
 /**
  * Implement hook_menu().
@@ -12,22 +11,22 @@ define('PER_PAGES', 4);
 function login_logs_menu() {
   $items = array();
   $items['login_logs'] = array(
-    'title' => 'Logs' . PER_PAGES ,
+    'title' => 'Logs',
     'page callback' => 'login_logs_get_all_stats',
     'type' => MENU_NORMAL_ITEM,
-    'access callback' => TRUE, 
+    'access arguments' => array('administer users'),
   ); 
   $items['login_logs/all'] = array(
     'title' => 'All statistics',
     'page callback' => 'login_logs_get_all_stats',
     'type' => MENU_LOCAL_TASK,
-    'access callback' => TRUE, 
+    'access arguments' => array('administer users'),
   ); 
   $items['login_logs/average'] = array(
     'title' => 'Average statistics',
     'page callback' => 'login_logs_get_average_stats',
     'type' => MENU_LOCAL_TASK,
-    'access callback' => TRUE, 
+    'access arguments' => array('administer users'),
   ); 
   return $items;
 }
@@ -39,7 +38,7 @@ function login_logs_menu() {
 function login_logs_get_all_stats() {
   $header = array(t('ID'), t('Name'), t('Time'));
   $rows = array();
-  //Select data from 'login_logs' table with options.
+  //Select data from 'login_logs' table with  some options.
   $query = db_select('login_logs', 'l')
     ->fields('l', array('uid', 'name', 'login'))
     ->orderBy('l.myid', 'DESC')
@@ -51,7 +50,7 @@ function login_logs_get_all_stats() {
     $rows[] = array(
       $value['uid'],
       $value['name'],
-    format_date($value['login'], 'medium'),
+      format_date($value['login'], 'medium'),
     );
   }
   $output = theme('table', array('header' => $header, 'rows' => $rows));
@@ -67,19 +66,18 @@ function login_logs_get_average_stats() {
   $header = array(t('Name'), t('Count'));
   $rows = array();
   $names = array();
-
-  //Select data from 'login_logs' table with options.
+  //Select data from 'login_logs' table with some options.
   $query = db_select('login_logs', 'l')
     ->fields('l', array('name'))
     ->orderBy('l.uid', 'ASC')
     ->execute();
-  // Read query and fill array.
+  //Read query and fill array.
   while ($value = $query->fetchAssoc()) {     
     $names[] = $value['name'];
   }
   //Returns an array using the values of array as keys and their frequency in array as values.
-  $array = array_count_values($names);
-  foreach ($array as $key => $value) {
+  $number_users_login = array_count_values($names);
+  foreach ($number_users_login  as $key => $value) {
     $rows[] = array(     
       $key,
       $value,
@@ -102,9 +100,9 @@ function login_logs_user_login(&$edit, $account) {
   $user_values = array(
     'uid' => $account->uid,
     'name' => $account->name,
-    'login' => $account->login
+    'login' => $account->login,
   );
   $add_data = db_insert('login_logs')
-  ->fields($user_values)
-  ->execute();
+    ->fields($user_values)
+    ->execute();
 }

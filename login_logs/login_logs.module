@@ -38,8 +38,19 @@ function login_logs_menu() {
 function login_logs_get_all_stats() {
   $header = array(t('ID'), t('Name'), t('Time'));
   $rows = array();
-  //Select data from 'login_logs' table with  some options.
-  $rows= login_logs_select_all_data();
+  //Select data from 'login_logs' table with options.
+  $rows = login_logs_select_all_data();
+  //Format the date.
+  foreach ($rows as $key => $value) { 
+    foreach ($value as $und_key => $und_value) { 
+      if ($und_key=='2') { 
+        $rows[$key]['2'] = format_date($und_value, 'medium');
+      } 
+      else { 
+        $rows[$key][$und_key] = $und_value; 
+      } 
+    } 
+  }
   $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
   $output .= theme('pager'); 
   return $output;
@@ -55,7 +66,7 @@ function login_logs_get_average_stats() {
   $names = array();
   $page = array();
   $chunks  = array();
-  //Select data from 'login_logs' table with some options.
+  //Select data from 'login_logs' table with options.
   $names = login_logs_select_names();  
   //Returns an array using the values of array as keys and their frequency in array as values.
   $number_users_login = array_count_values($names);
@@ -109,7 +120,7 @@ function login_logs_select_all_data() {
     $rows[] = array(
       $value['uid'],
       $value['name'],
-      format_date($value['login'], 'medium'),
+      $value['login'],
     );
   }
   return $rows;

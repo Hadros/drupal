@@ -1,13 +1,13 @@
  <?php
 
 /**
- * Number elements per page.
- */ 
+* Number elements per page.
+*/ 
 define('PER_PAGES', 6);
 
 /**
- * Implement hook_menu().
- */
+* Implement hook_menu().
+*/
 function login_logs_menu() {
   $items = array();
   $items['login_logs'] = array(
@@ -87,8 +87,8 @@ function login_logs_get_average_stats() {
 }
 
 /**
- * Implement hook_user_login().
- */
+* Implement hook_user_login().
+*/
 function login_logs_user_login(&$edit, $account) {
   //Selects varaibles for input in 'login_logs' table.
   $user_values = array(
@@ -110,7 +110,7 @@ function login_logs_select_all_data() {
     ->extend('PagerDefault')
     ->limit(variable_get('per_page', PER_PAGES))
     ->execute();
-  // Read query and fill rows of the table.
+  //Read query and fill rows of the table.
   foreach ($query as $key => $value) { 
     foreach ($value as $under_key => $under_value) { 
       $rows[$key][$under_key] = $under_value;

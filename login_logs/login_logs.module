@@ -48,13 +48,8 @@ function login_logs_get_all_stats() {
       format_date($value['login'], 'medium'),
     );
   }
-  //Check for the existence of data in the 'login_logs' table for correctly output.
-  if (isset($value['udi'])) {
-    $output = theme('table', array('header' => $header, 'rows' => $rows));
-    $output .= theme('pager'); 
-  } else {
-    $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
-  }    
+  $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
+  $output .= theme('pager'); 
   return $output;
 }
 
@@ -90,7 +85,8 @@ function login_logs_get_average_stats() {
   if (isset($key)) {
     $output = theme('table', array('header' => $header, 'rows' => $chunks[$page]));
     $output .= theme('pager'); 
-  } else {
+  }
+  else {
     $output = theme('table', array('header' => $header, 'rows' => $rows, 'empty' => 'Table is empty!'));
   }    
   return $output;

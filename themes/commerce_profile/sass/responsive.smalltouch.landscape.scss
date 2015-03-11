@@ -1,0 +1,17 @@
+@import "base";
+
+#main-content .view-products-for-homepage .view-content .views-row {
+  width: 43%;
+}
+
+  .node-product {
+    .jcarousel-container-vertical,
+    .jcarousel-container-horizontal {
+      .jcarousel-prev {
+        margin-left: -70px;
+      }
+      .jcarousel-next {
+        margin-right: -60px;
+      }
+    }
+  }

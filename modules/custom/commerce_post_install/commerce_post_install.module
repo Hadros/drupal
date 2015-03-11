@@ -1,0 +1,43 @@
+<?php
+
+function commerce_post_install_init() {
+  global $theme;
+  if (variable_get('jquery_update_jquery_version') != 1.7) {
+    variable_set('jquery_update_jquery_version', 1.7);
+  }
+  if (variable_get('jquery_update_jquery_admin_version') != 1.5) {
+    variable_set('jquery_update_jquery_admin_version', 1.5);
+  }
+  $array = array(
+    
+  );
+  variable_set('field_bundle_settings_taxonomy_term__tags', $array);
+  if ($theme != 'commerce_profile') {
+    $enable = array(
+      'theme_default' => 'commerce_profile',
+      'admin_theme' => 'seven',
+    );
+    theme_enable($enable);
+
+    foreach ($enable as $var => $theme) {
+      if (!is_numeric($var)) {
+        variable_set($var, $theme);
+      }
+    }
+
+    theme_disable(array('bartik'));
+  }
+  $module_list = array('commerce_post_install');
+  module_disable($module_list, FALSE);
+}
+
+function commerce_post_install_taxonomy_display_plugins() {
+  return array(
+    'associated' => array(
+      'TaxonomyDisplayAssociatedDisplayHandlerViews' => t('Categories term display handler'),
+    ),
+    'term' => array(
+      'TaxonomyDisplayTermDisplayHandlerCore' => t('Categories associated display handler'),
+    ),
+  );
+}

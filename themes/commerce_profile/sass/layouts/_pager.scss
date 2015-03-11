@@ -1,0 +1,26 @@
+.item-list {
+  .pager {
+    margin: 9px 0 85px 0;
+    border-top: 4px solid #edf0f3;
+    padding-top: 40px;
+    li {
+      @include ib;
+      padding: 0;
+      margin: 0 17px 0 0;
+    }
+    .pager-current {
+      background: #5a616a;
+      color: #FFF;
+      padding: 8px 14px;
+    }
+    a {
+      padding: 8px 14px;
+      color: #FFF;
+      background: #a6acb4;
+      display: block;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+}

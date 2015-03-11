@@ -1,0 +1,10 @@
+name = Image styles
+core = 7.x
+package = Features
+dependencies[] = image
+features[features_api][] = api:2
+features[image][] = 140_150
+features[image][] = 168x178
+features[image][] = 570x320
+features[image][] = 668x598
+features[image][] = frontpage_slideshow

@@ -1,0 +1,16 @@
+.sprite-sprite {
+  background: url('images/sprite-s4147f803ac.png') no-repeat;
+}
+
+#main-content .view-products-for-homepage .view-content .views-row {
+  width: 43%;
+}
+
+.node-product .jcarousel-container-vertical .jcarousel-prev,
+.node-product .jcarousel-container-horizontal .jcarousel-prev {
+  margin-left: -70px;
+}
+.node-product .jcarousel-container-vertical .jcarousel-next,
+.node-product .jcarousel-container-horizontal .jcarousel-next {
+  margin-right: -60px;
+}

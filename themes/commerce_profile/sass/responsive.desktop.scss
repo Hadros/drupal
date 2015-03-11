@@ -1,0 +1,9 @@
+@import "base";
+
+#columns {
+  @include max-width;
+}
+
+#header #block-block-7 {
+  display: none;
+}

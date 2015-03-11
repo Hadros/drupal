@@ -1,0 +1,190 @@
+#footer {
+  background: #6b7179;
+  border-top: 6px solid #525860;
+  padding-bottom: 17px;
+  color: #fff;
+  .region-footer {
+    .region-inner {
+      padding-top: 28px;
+      text-align: center;
+      .block {
+        @include ib;
+        margin: 0 15px;
+        text-align: left;
+        max-width: 270px;
+        width: 20%;
+          .block-title {
+            text-align: left;
+            font-family: $title;
+            color: #FFF;
+            font-size: $title_size;
+            font-weight: 300;
+            background: #26292d;
+            text-align: center;
+            margin-bottom: 18px;
+            text-transform: uppercase;
+            padding: 7px;
+          }
+          .content {
+            .footer-social-links {
+              font-size: 0;
+                .facebook,
+                .twitter,
+                .linkedin,
+                .google-plus {
+                  width: 42px;
+                  height: 42px;
+                  @include ib;
+                  font-size: 0;
+                  margin: 0 10px 10px 0;
+                }
+                .facebook { 
+                  @extend .sprite-facebook;
+                    &:hover {
+                      @extend .facebook_hover;
+                    }
+                } 
+                .twitter {
+                  @extend .sprite-twitter;
+                    &:hover {
+                      @extend .twitter_hover;
+                    }
+                }
+                .linkedin {
+                  @extend .sprite-in;
+                    &:hover {
+                      @extend .in_hover; 
+                    }
+                }
+                .google-plus {
+                  @extend .sprite-google;
+                    &:hover {
+                      @extend .google_hover;
+                    }
+                }
+            }
+            a {
+              color: #fff;
+            }
+            a:hover {
+              color: #CAD0D6;
+            }
+            li {
+              line-height: 26px;
+            }
+          }
+      }
+      #block-block-6 {
+        max-width: 100%;
+        width: 100%;
+      }
+      .block-simplenews {
+        .block-title {
+          margin-bottom: 23px;
+        }
+        .form-item-mail {
+          margin-bottom: 14px;
+        }
+      }
+      li {
+        list-style: none;
+        color: #FFF;
+      }
+
+    }
+  }
+      #block-block-3 {
+        li {
+          line-height: 18px;
+        }
+        p {
+          height: 12px;
+        }
+      }
+      .custom-footer-simplenews {
+        label {
+          display: none;
+        }
+        .form-text {
+          border: 1px solid #5a616a;
+          border-radius: 2px;
+          width: 100%;
+          color: #26292D;
+          padding: 4px 9px;
+          box-sizing: border-box;
+          font-size: 14px;
+          height: 28px;
+        }
+        .form-submit {
+          @include submit;
+          float: right;
+          border: none;
+          border: 1px solid #b6bcc3;
+          min-width: 100px;
+          padding: 7px;
+          text-transform: uppercase;
+          font-size: 11px;
+          color: #26292D;
+          border-radius: 2px;
+          box-shadow: inset 0px -1px 0px 0px #e9ebed, 0px 1px 0px 0px #525860;
+        }
+        .form-submit:hover {
+          border-color: #00b4e5;
+          @include submit_hover;
+          box-shadow: inset 0px -1px 0px 0px #8ed7eb, 0px 1px 0px 0px #525860;
+          color: #fff;
+        }
+      }
+
+      #block-block-6 {
+        display: block;
+        border-top: 1px solid #525860;
+        margin: 23px 0 0 0;
+          .content {
+            @include max_width;
+            width: 90%;
+              .footer-information {
+                float: left;
+                color: #fff;
+                font-size: 13px;
+                margin-top: 17px;
+                a {
+                  padding: 0 3px;
+                  font-size: 13px;
+                }
+                a:first-child {
+                  padding-left: 0;
+                }
+                p {
+                  margin-top: 5px;
+                  color: #FFF;
+                }
+              }
+          }
+      }
+  .footer-information-image {
+    float: right;
+    margin-top: 30px;
+    .paypal,
+    .visa,
+    .master_card,
+    .maestro {
+      width: 46px;
+      height: 26px;
+      @include ib;
+      margin-left: 8px;
+    }
+    .paypal {
+      @extend .sprite-paypal;
+    }
+    .visa {
+      @extend .sprite-visa;
+    }
+    .master_card {
+      @extend .sprite-master_card;
+    }
+    .maestro {
+      @extend .sprite-maestro;
+    }
+  }
+} 

@@ -1,0 +1,70 @@
+.block-webform {
+  .form-text {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 19px;
+    padding: 4px 7px;
+  }
+  .form-actions {
+    margin-bottom: 90px;    
+  }
+  .form-submit {
+    @include submit;
+    padding: 7px 24px;
+    height: 30px;
+    font-size: 11px;
+  }
+  .form-submit:hover {
+    @include submit_hover;
+  }
+  .webform-component-textarea {
+    margin-bottom: 19px;
+      textarea {
+        padding-top: 7px;     
+      }
+  }
+}
+ #main-content  {
+  .block-webform {
+    .block-title {
+      font-size: 20px;
+      border-top: 4px solid #edf0f3;
+      border-bottom: none;
+      padding: 25px 0 0 0;
+      margin: 36px 0 16px 0;
+    }
+ }
+}
+
+.page-node-48 {
+  iframe {
+    margin-bottom: 17px;
+    width: 100%;
+  }
+  .field-name-body {
+    .contact-us-title {
+      font-size: 26px;
+      font-family: $title;
+      font-size: 26px;
+      margin-bottom: 5px;
+    }
+    ul {
+      margin-top: 29px;
+    }
+    li {
+      list-style: none;
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+    li,
+    a {
+      color: #828487;
+    }
+    a:hover {
+      text-decoration: underline;
+    }
+  }
+  #main-content #page-title {
+    width: 100%;
+  }
+}

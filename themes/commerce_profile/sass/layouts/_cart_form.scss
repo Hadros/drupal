@@ -1,0 +1,144 @@
+.view-commerce-cart-form {
+  a {
+    color: #26292D;
+      &:hover {
+        text-decoration: underline;
+      }
+  }
+
+  .views-table {
+    width: 100%;
+      thead {
+        th {
+          padding-bottom: 10px;
+          padding-left: 3%;
+        }
+      }
+      tbody {
+          td {
+            vertical-align: middle;
+            padding: 5px 0 5px 3%;
+            text-align: left;
+              .delete-line-item {
+                margin: 0;
+              }
+              .form-text {
+                padding: 0;
+              }
+          }
+      }
+  }
+  .line-item-summary {
+    padding-top: 10px;
+  }
+  .form-submit {
+    padding: 0 10px;
+    margin-left: 10px;
+  }
+}
+.view-commerce-line-item-table,
+#commerce-checkout-form-checkout {
+  .views-table {
+    width: 100%;
+      thead {
+        th {
+          padding-bottom: 10px;
+          padding-left: 3%;
+        }
+      }
+  }
+  label {
+    margin: 15px 0 5px 0;
+  }
+  .form-text {
+    box-sizing: border-box;
+    width: 100%;
+    padding: 0 7px;
+  }
+  .form-select {
+    width: 100%;
+  }
+
+  div.addressfield-container-inline > div.form-item {
+    float: none;
+    margin: 0;
+  }
+  td {
+    padding: 10px 3%;
+  }
+
+  .view-footer {
+    margin-top: 10px;
+  }
+}
+
+.field-name-commerce-order-total {
+  margin: 10px 0;
+}
+
+.page-checkout {
+    .checkout-review {
+      width: 100%;
+        table {
+          width: 100%;
+        }
+    }
+    #main-content {
+      a {
+        color: #26292D;
+        text-decoration: underline;
+          &:hover {
+            text-decoration: none;
+          }
+      }
+    }
+  .checkout-help {
+    margin-bottom: 15px;
+  }
+  .checkout-review {
+    margin-bottom: 15px;
+  }
+  .form-radios {
+    margin: 20px 0;
+  }
+  #payment-details {
+    .form-item {
+      margin-bottom: 15px;
+    }
+  }
+}
+
+  .views-align-right {
+    text-align: left;
+  }
+  .field-name-commerce-customer-billing {
+    .field-label {
+      margin-bottom: 10px;
+    }
+  }
+  .checkout-buttons {
+    text-align: right;
+    margin: 20px 0 15px 0;
+      input,
+      span {
+        padding: 0 10px;
+      }
+      .form-submit {
+        @include submit;
+        padding: 0 10px;
+        color: #26292D;
+          &:hover {
+            @include submit_hover;
+            text-decoration: none;
+          }
+      }
+  }
+  .page-checkout,
+  .page-user {
+    #main-content {
+      margin-bottom: 25px;
+    }
+    legend {
+      margin-bottom: 15px;
+    }
+  }

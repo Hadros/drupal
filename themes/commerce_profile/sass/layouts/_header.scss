@@ -1,0 +1,89 @@
+#header {
+  padding: 14px 15px 16px 15px;
+  .block-menu {
+    .block-title {
+      display: none;
+    } 
+    .menu {
+      li {
+        @include ib;
+      }
+    }
+  }
+  .region-header {
+    .region-inner {
+      @include max_width;
+      padding: 0 15px 0 15px;
+      .block {
+        @include ib;
+      }
+      #block-block-5 {
+        padding: 10px 0;
+      }
+      #logo {
+        margin-right: 42px;
+        @include ib;
+        img {
+          display: block;
+        }
+      }
+      .block-search {
+        border: 1px solid #abb4bf;
+        border-radius: 2px;
+        width: 200px;
+        position: relative;
+        float: right;
+        margin-top: 19px;
+        padding-right: 25px;
+          .form-text {
+            border: none;
+            width: 98%;
+            padding: 4px 0 4px 7px;
+            -webkit-appearance: none;
+            max-width: 200px;
+            display: block;
+            -moz-box-sizing:    border-box;
+            -webkit-box-sizing: border-box;
+            box-sizing:         border-box;
+            overflow: hidden;
+            outline: none;
+          }
+          input[type="search"]::-webkit-search-cancel-button {
+            -webkit-appearance: none;
+            }
+          .form-submit {
+            border: none;
+            @include sprite-sprite(search_header);
+            font-size: 0;
+            position: absolute;
+            right: 7px;
+            top: 5px;
+            box-shadow: none;
+            filter: progid:DXImageTransform.Microsoft.gradient(enabled = false);
+          }
+          .form-text:focus {
+            border-width: 0px;
+            outline: none;
+            -webkit-appearance:none;
+            box-shadow: none;
+            -moz-box-shadow: none;
+            -webkit-box-shadow: none;
+          }
+      }
+      .block-menu {
+        font-size: 15px;
+        margin-top: 20px;
+        .menu {
+          a {
+            font-size: 15px;
+            color: #26292D;
+            margin: 0 15px;
+          }
+          a:hover {
+            color: #828487;
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,5 +1,0 @@
-; &Id: $
-name=internet_reception
-description=Create the form for internet_reception.
-version=7.x-dev
-core=7.x

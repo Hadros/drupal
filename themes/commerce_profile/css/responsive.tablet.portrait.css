@@ -1,0 +1,16 @@
+.sprite-sprite {
+  background: url('images/sprite-s4147f803ac.png') no-repeat;
+}
+
+.sidebar .view-products-for-homepage .view-content > .views-row {
+  width: 100%;
+  display: block;
+}
+
+div.region-leaderboard .block {
+  width: auto;
+}
+
+.not-front #main-content .view-products-for-homepage .view-content .views-row {
+  width: 21%;
+}

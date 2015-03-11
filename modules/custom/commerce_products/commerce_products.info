@@ -1,0 +1,19 @@
+name = Dummy commerce products
+description = Add a few dummy commerce products.
+core = 7.x
+package = Custom
+
+dependencies[] = commerce
+dependencies[] = commerce_price
+dependencies[] = commerce_product_pricing
+dependencies[] = commerce_product_reference
+dependencies[] = commerce_product
+dependencies[] = commerce_pdm
+dependencies[] = taxonomy_terms
+dependencies[] = ecommerce_common
+dependencies[] = file
+dependencies[] = user
+dependencies[] = custom_taxonomy
+dependencies[] = content_types
+dependencies[] = commerce_product_type
+dependencies[] = variable_settings

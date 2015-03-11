@@ -1,0 +1,163 @@
+<?php
+
+/**
+ * Implements hook_init().
+ */
+function commerce_products_init() {
+  /*$node = entity_load_by_conditions('commerce_product');
+  if (!isset($node)) {
+    // Product
+    $product = commerce_product_new('product');
+    $product->sku = 'TEST_1';
+    $product->title = 'Product title';
+    $product->language = LANGUAGE_NONE;
+    $product->uid = 1;
+    $product->commerce_price[LANGUAGE_NONE][0]['amount'] = 10 * 100; // $10
+    $product->commerce_price[LANGUAGE_NONE][0]['currency_code'] = 'USD';
+    $product->field_description[LANGUAGE_NONE][0]['value'] = '<p>A luminous coating provides long-term illumination in the dark after only a short exposure to light.&nbsp;</p>';
+    $product->field_specifications[LANGUAGE_NONE][0]['value'] = '<p><strong>Accuracy</strong><br />+/- 20 sec seconds per month<br /><br /><strong>Type of battery</strong><br />CR2012<br /><br />';
+    $product->field_rating[LANGUAGE_NONE][0]['rating'] = 80;
+    
+    $file_path = drupal_realpath('profiles/commerce_profile/import/images/1005714360.jpg');
+ 
+    $file = (object)array(
+      'uid' => 1,
+      'uri' => $file_path,
+      'filename' => basename($file_path),
+      'filemime' => file_get_mimetype($file_path),
+    );
+
+    $file = file_copy($file, 'public://images');
+
+    if ($file) {
+      $product->field_view[LANGUAGE_NONE][] = (array)$file;
+    }
+    
+    commerce_product_save($product);
+
+    // Product display
+    $node = (object)array('type' => 'product');
+    node_object_prepare($node);
+    $node->title = 'TEST_1';
+    $node->uid = 1;
+    $node->field_product[LANGUAGE_NONE][]['product_id'] = $product->product_id;
+    $node->language = LANGUAGE_NONE;
+    $node->field_special_offer[LANGUAGE_NONE][0]['value'] = 0;
+    $node->field_tags[LANGUAGE_NONE][0]['tid'] = 7;
+    $node->field_tags[LANGUAGE_NONE][1]['tid'] = 30;
+    $node->field_tags[LANGUAGE_NONE][2]['tid'] = 32;
+    $node->field_tags[LANGUAGE_NONE][3]['tid'] = 31;
+    $node->field_category[LANGUAGE_NONE][0]['tid'] = 1;
+    $node->field_category[LANGUAGE_NONE][1]['tid'] = 18;
+    node_save($node);
+  } 
+  else {
+    module_disable(array('commerce_products'), FALSE);
+  }*/
+  $aliases = array();
+  $path = getcwd() . '/profiles/commerce_profile/import/product.csv';
+  $f = fopen($path, "r");
+  $data = fgetcsv($f, 1000, ',');
+   
+  while(!feof($f)) {   
+    $data = fgetcsv($f, 1000, ',');    
+    $images = explode(', ', $data[1]);
+    $categories = explode(', ', $data[9]);
+    $tags = explode(', ', $data[10]);
+    $c_tids = array();
+    $t_tids = array();
+    foreach ($categories as $category) {
+      $terms = taxonomy_get_term_by_name($category, 'categories');
+      foreach ($terms as $term) {
+        if (isset($term->tid)) {
+          $c_tids[] = $term->tid;
+        }
+      }
+    }
+    foreach ($tags as $tag) {
+      $terms = taxonomy_get_term_by_name($tag, 'tags');
+      foreach ($terms as $term) {
+        if (isset($term->tid)) {
+          $t_tids[] = $term->tid;
+        }
+      }
+    }    
+    $product = commerce_product_new('product');
+    $product->sku = $data[4];
+    $product->title = $data[6];
+    $product->language = LANGUAGE_NONE;
+    $product->uid = 1;
+    if (isset($data[2])) {
+      $product->commerce_price[LANGUAGE_NONE][0]['amount'] = $data[2];
+    }
+    else {
+      $product->commerce_price[LANGUAGE_NONE][0]['amount'] = 1000;
+    }
+    $product->commerce_price[LANGUAGE_NONE][0]['currency_code'] = 'USD';
+    $product->field_description[LANGUAGE_NONE][0]['value'] = $data[0];
+    $product->field_specifications[LANGUAGE_NONE][0]['value'] = $data[5];
+    $product->field_rating[LANGUAGE_NONE][0]['rating'] = $data[3] * 100;    
+    foreach ($images as $image) {
+      $file_path = drupal_realpath('profiles/commerce_profile/import/images/' . basename($image));
+      $file = (object)array(
+        'uid' => 1,
+        'uri' => $file_path,
+        'filename' => basename($file_path),
+        'filemime' => file_get_mimetype($file_path),
+      );
+
+      $file = file_copy($file, 'public://images/');
+
+      if ($file) {
+        $product->field_view[LANGUAGE_NONE][] = (array)$file;
+      }
+    }
+    commerce_product_save($product);
+    $node = (object)array('type' => 'product');
+    node_object_prepare($node);
+    $node->title = $data[8];
+    $node->promote = 0;
+    $node->uid = 1;
+    $node->field_product[LANGUAGE_NONE][]['product_id'] = $product->product_id;
+    $node->language = LANGUAGE_NONE;
+    $node->field_special_offer[LANGUAGE_NONE][0]['value'] = $data[7];
+    foreach ($t_tids as $tag) {
+      $node->field_tags[LANGUAGE_NONE][] = array(
+        'tid' => $tag,
+      );
+    }
+    foreach ($c_tids as $category) {
+      $node->field_category[LANGUAGE_NONE][] = array(
+        'tid' => $category,
+      );
+    }
+    $alias = 'product/';
+    foreach ($categories as $category) {
+      if ($categories[count($categories)-1] != $category) { 
+        $alias .= strtolower($category) . '-';
+      }
+      else {
+        $alias .= strtolower($category) . '/';
+      }
+    }
+    $alias .= strtolower($node->title);
+    $alias = str_replace(' ', '-', $alias);
+    if (in_array($alias, array_keys($aliases))) {
+      $new_alias = $alias . '-' . count($aliases[$alias]);
+    }
+    else {
+      $new_alias = $alias;
+    }
+    $aliases[$alias][] = $new_alias;
+    $node->path = array(
+      'alias' => $new_alias,
+      'pathauto' => FALSE,
+      'language' => $node->language,
+    );
+    if ($node->title) {
+      node_save($node);
+    }
+  }
+  $module_list = array('commerce_products');
+  module_disable($module_list, FALSE);
+}

@@ -1,0 +1,36 @@
+#block-delta-blocks-breadcrumb {
+    display: block;
+    margin-bottom: 60px;
+    padding: 18px 0 6px 0;
+    background: #f6f6f6 url(images/i/bg_breadcrumb.png) repeat-x top left;
+  #breadcrumb {
+      max-width: 1170px;
+      margin: auto;
+      padding: 0 15px;
+    li {
+      list-style: none;
+      @include ib;
+      a {
+        font-size: 13px;
+        color: #828487;
+        text-transform: capitalize;
+      }
+      a:before {
+        content: '/';
+        margin: 0 6px;
+        color: #828487;
+      }
+       .active {
+         color: #00B4E5;
+       }
+       .active:after {
+         display: none;
+       }
+    }
+    .first {
+      a:before {
+        display: none;
+      }
+    }
+  }
+}
